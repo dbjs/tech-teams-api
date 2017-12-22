@@ -30,6 +30,9 @@ router.route('/updatenote')
 router.route('/profile')
   .get(verifyUserWithJWT, profile.get);
 
+router.route('/updatetech')
+  .post(profile.updateTech)
+
 router.route('/updateprofile')
   .post(profile.update);
 

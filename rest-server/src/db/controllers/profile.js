@@ -29,7 +29,7 @@ module.exports = {
   },
 
   update: (req, res) => {
-    const email = req.body.email;
+    const email = jwtDecode(req.headers.authorization).email;
     const updatedUser = {
       name: req.body.name,
       position: req.body.position,
@@ -38,7 +38,6 @@ module.exports = {
       location: req.body.location,
       imageurl: req.body.imageurl,
       title: req.body.title,
-      tech: req.body.tech,
     };
 
     db.users.update(updatedUser, { where: { email: email } })
@@ -49,4 +48,19 @@ module.exports = {
         throw err;
       });
   },
+
+  updateTech: (req, res) => {
+    const email = jwtDecode(req.headers.authorization).email;
+    const tech = {
+        tech: req.body.tech
+    };
+
+    db.users.update(tech, { where: { email: email } })
+      .then(data => {
+        res.status(200).send(data)
+      })
+      .catch((err) => {
+        throw err;
+      });
+    }
 };
