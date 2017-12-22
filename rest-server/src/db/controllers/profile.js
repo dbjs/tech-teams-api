@@ -15,8 +15,17 @@ module.exports = {
           data.notifications = notifications;
           db.positions.findAll({ where: { user: email } })
           .then(positions => {
-            data.positions = positions;
-            res.send(data);
+            for (let i = 0; i < positions.length; i++) {
+              db.projects.findOne({ where: {name: positions[i].project} })
+                .then(pdata => {
+                  positions[i].imageurl = pdata.imageurl;
+                  if (i === positions.length - 1) {
+                    data.positions = positions
+                    res.send(data);
+                  }
+
+                })
+            }
           })
         })
         .catch(err => {
