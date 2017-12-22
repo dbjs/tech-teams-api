@@ -55,8 +55,18 @@ module.exports = {
         data.pinfo = pinfo;
         db.positions.findAll({ where: { project: name} })
           .then(positions => {
-            data.positions = positions;
-            res.send(data);
+            data.positions = []
+
+            for (let i = 0; i < positions.length; i++) {
+              console.log(i, positions[i].user, '=================')
+              db.users.findOne({ where: { email: positions[i].user } })
+                .then(udata => {
+                  data.positions.push(udata)
+                  if (i === positions.length - 1) {
+                    res.send(data);
+                  }
+                })
+            }
           })
           .catch(err => {
             throw err;
